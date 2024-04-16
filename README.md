@@ -19,5 +19,7 @@
 #### Side Notes
 
 This module came up as a mixture of two sessions I´ve seen at the PowerShell + Devops Global Summit in 2024.
-Justin Grote introduces in his session how FeedbackProvider in PowerShell works and he showed his ScriptFeedBackProvider Module
+
+[Justin Grote](https://github.com/JustinGrote) introduces in his session how FeedbackProvider in PowerShell works and he showed his ScriptFeedBackProvider Module.
+
 [Dave Caroll](https://thedavecarroll.com/) did a session about cross platform script integration.
