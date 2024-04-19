@@ -4,7 +4,6 @@ try {
     if($null -ne (Get-Module -Name ScriptFeedbackProvider)){
         Import-Module ScriptFeedbackProvider -ErrorAction Stop
     }
-
 }
 catch {
     Write-Error 'Module: ScriptFeedBackProver  - must be installed!'
@@ -20,9 +19,16 @@ catch {
     return
 }
 
-Get-ScriptFeedbackProvider |Where-Object Name -eq 'Cross-Platform EnvironmentVariables' | Unregister-ScriptFeedbackProvider
 
-$EnvironmentVariablesScriptBlock=(get-command "$PSSCriptroot\Private\FBP.CP.Environment.ps1").ScriptBlock
-
-Register-ScriptFeedbackProvider -Name 'Cross-Platform EnvironmentVariables' -Trigger Success -ScriptBlock $EnvironmentVariablesScriptBlock
+foreach($ProviderFile in (Get-Childitem -Path "$PSSCriptroot\Private\")){
+    $ProviderScriptBlock = (get-command $ProviderFile.FullName).ScriptBlock
+    # get the ProviderName 
+    $ProviderName = ($ProviderScriptBlock.Ast.Extent.StartScriptPosition.GetFullScript().Split("`n") | Where-Object { $_.TrimStart().StartsWith('#ProviderName: ')  }).split('#ProviderName: ')[1]
+    if([string]::isNullOrEmpty($ProviderName)){
+        continue
+    }
+    # Unregister and register all FeedBackProver inside of 'Private' folder
+    Get-ScriptFeedbackProvider |Where-Object Name -eq $ProviderName | Unregister-ScriptFeedbackProvider
+    Register-ScriptFeedbackProvider -Name $ProviderName -Trigger Success -ScriptBlock $ProviderScriptblock
+}
 Write-Host 'FeedbackProvider(s) for CrossPlattform has been registered' -ForegroundColor Green

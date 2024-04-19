@@ -1,8 +1,4 @@
-<#
-    All Feedback Providers (Scriptblocks) to register for EnvironmentVariables
-#>
-
-
+#ProviderName: Cross-Platform EnvironmentVariables
 
 param($context)
 if ($context) { 
